@@ -3,7 +3,7 @@ import { Product } from "../types";
 import Colors from "@/constants/Colors";
 import { Link } from "expo-router";
 
-const fallbackProductImage =
+export const fallbackProductImage =
   "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png";
 
 type ProductListItemProps = {
