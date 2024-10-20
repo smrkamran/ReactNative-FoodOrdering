@@ -5,26 +5,18 @@ import { useCart } from "@/providers/CartProvider";
 import { PizzaSize } from "@/types";
 import { FontAwesome } from "@expo/vector-icons";
 import products from "assets/data/products";
-import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { Link, Stack, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
 const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
 
 const ProductDetailsScreen = () => {
-  const router = useRouter();
   const { id } = useLocalSearchParams();
-  const [selectedSize, setSelectedSize] = useState<PizzaSize>("M");
   const product = products.find((x) => x.id.toString() === id);
   if (!product) {
     return <Text>Product not found!</Text>;
   }
-
-  const { addItem } = useCart();
-  const addToCart = () => {
-    addItem(product, selectedSize);
-    router.push("/cart");
-  };
 
   return (
     <>
@@ -32,7 +24,7 @@ const ProductDetailsScreen = () => {
         options={{
           title: "Menu",
           headerRight: () => (
-            <Link href="/cart" asChild>
+            <Link href={`/(admin)/menu/create?id=${id}`} asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome
