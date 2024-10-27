@@ -3,7 +3,9 @@ import React from "react";
 import { Stack } from "expo-router";
 
 const OrdersListScreen = () => {
-  return <Stack />;
+  return <Stack>
+    <Stack.Screen name="list" options={{ headerShown: false }} />
+  </Stack>;
 };
 
 export default OrdersListScreen;

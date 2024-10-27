@@ -7,7 +7,7 @@ import orders from "assets/data/orders";
 const OrderList = () => {
   return (
     <View style={{ backgroundColor: "gainsboro", height: "100%" }}>
-      <Stack.Screen options={{ title: "Orders" }} />
+      <Stack.Screen options={{ title: "Active" }} />
       <FlatList
         data={orders}
         renderItem={({ item }) => <OrderListItem key={item.id} order={item} />}
