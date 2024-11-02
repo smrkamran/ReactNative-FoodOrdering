@@ -4,11 +4,16 @@ import Button from "@/components/Button";
 import { fallbackProductImage } from "@/components/ProductListItem";
 import Colors from "@/constants/Colors";
 import * as ImagePicker from "expo-image-picker";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { useInsertProduct } from "@/api/products";
 
 export default function CreateProductScreen() {
   const { id } = useLocalSearchParams();
   const isUpdating = !!id;
+
+  const router = useRouter();
+
+  const { mutate: insertProduct } = useInsertProduct();
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -38,12 +43,18 @@ export default function CreateProductScreen() {
   };
 
   const onCreate = () => {
-    console.log("Creating Product", name, price);
     if (!areInputsValid()) {
       return;
     }
-    // Save in the database
-    resetFields();
+    insertProduct(
+      { name, image, price: parseFloat(price) },
+      {
+        onSuccess: () => {
+          resetFields();
+          router.back();
+        },
+      }
+    );
   };
   const onUpdate = () => {
     console.log("Updating Product", name, price);
@@ -76,22 +87,20 @@ export default function CreateProductScreen() {
     }
   };
 
-  const onDelete = () => {
-
-  }
+  const onDelete = () => {};
 
   const confirmDelete = () => {
     Alert.alert("Confirm", "Are you sure you want to delete this product?", [
-        {
-            text: 'Cancel'
-        },
-        {
-            text: 'Delete',
-            style: "destructive",
-            onPress: onDelete
-        }
-    ])
-  }
+      {
+        text: "Cancel",
+      },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: onDelete,
+      },
+    ]);
+  };
 
   return (
     <View style={styles.container}>
@@ -124,7 +133,11 @@ export default function CreateProductScreen() {
       <Text style={{ color: "red" }}>{errors}</Text>
 
       <Button text={isUpdating ? "Update" : "Create"} onPress={onSubmit} />
-      {isUpdating && <Text onPress={confirmDelete} style={styles.textBtn}>Delete</Text>}
+      {isUpdating && (
+        <Text onPress={confirmDelete} style={styles.textBtn}>
+          Delete
+        </Text>
+      )}
     </View>
   );
 }
