@@ -1,24 +1,43 @@
 import { View, Text, StyleSheet, TextInput, Image, Alert } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@/components/Button";
 import { fallbackProductImage } from "@/components/ProductListItem";
 import Colors from "@/constants/Colors";
 import * as ImagePicker from "expo-image-picker";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { useInsertProduct } from "@/api/products";
+import {
+  useDeleteProduct,
+  useInsertProduct,
+  useProduct,
+  useUpdateProduct,
+} from "@/api/products";
 
 export default function CreateProductScreen() {
-  const { id } = useLocalSearchParams();
-  const isUpdating = !!id;
+  const { id: idString } = useLocalSearchParams();
+  const id = parseFloat(
+    typeof idString === "string" ? idString : idString?.[0]
+  );
+  const isUpdating = !!idString;
 
   const router = useRouter();
 
   const { mutate: insertProduct } = useInsertProduct();
+  const { mutate: updateProduct } = useUpdateProduct();
+  const { mutate: deleteProduct } = useDeleteProduct();
+  const { data: productToUpdate } = useProduct(id);
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [errors, setErrors] = useState("");
   const [image, setImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (productToUpdate) {
+      setName(productToUpdate.name);
+      setPrice(productToUpdate.price.toString());
+      setImage(productToUpdate.image);
+    }
+  }, [productToUpdate]);
 
   const resetFields = () => {
     setName("");
@@ -57,12 +76,18 @@ export default function CreateProductScreen() {
     );
   };
   const onUpdate = () => {
-    console.log("Updating Product", name, price);
     if (!areInputsValid()) {
       return;
     }
-    // Save in the database
-    resetFields();
+    updateProduct(
+      { id, name, image, price: parseFloat(price) },
+      {
+        onSuccess: () => {
+          resetFields();
+          router.back();
+        },
+      }
+    );
   };
 
   const pickImage = async () => {
@@ -87,7 +112,14 @@ export default function CreateProductScreen() {
     }
   };
 
-  const onDelete = () => {};
+  const onDelete = () => {
+    deleteProduct(id, {
+      onSuccess: () => {
+        resetFields();
+        router.replace("/(admin)");
+      },
+    });
+  };
 
   const confirmDelete = () => {
     Alert.alert("Confirm", "Are you sure you want to delete this product?", [
