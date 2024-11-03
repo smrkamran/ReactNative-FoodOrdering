@@ -1,12 +1,12 @@
 import { View, Text, StyleSheet, Image } from "react-native";
 import React from "react";
-import { Order, OrderItem } from "@/types";
+import { Order, OrderItem, Tables } from "@/types";
 import OrderListItem from "./OrderListItem";
 import { fallbackProductImage } from "./ProductListItem";
 import Colors from "@/constants/Colors";
 
 type OrderItemListItemProps = {
-  item: OrderItem;
+  item: { products: Tables<"products"> } & Tables<"order_items">;
 };
 
 const OrderItemListItem = ({ item }: OrderItemListItemProps) => {
@@ -20,7 +20,7 @@ const OrderItemListItem = ({ item }: OrderItemListItemProps) => {
       <View style={{ flex: 1 }}>
         <Text style={styles.title}>{item.products.name}</Text>
         <View style={styles.subtitleContainer}>
-          <Text style={styles.price}>${item.products.price.toFixed(2)}</Text>
+          <Text style={styles.price}>${item.products.price!.toFixed(2)}</Text>
           <Text>Size: {item.size}</Text>
         </View>
       </View>

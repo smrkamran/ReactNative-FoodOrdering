@@ -34,7 +34,7 @@ export default function CreateProductScreen() {
   useEffect(() => {
     if (productToUpdate) {
       setName(productToUpdate.name);
-      setPrice(productToUpdate.price.toString());
+      setPrice(productToUpdate.price!.toString());
       setImage(productToUpdate.image);
     }
   }, [productToUpdate]);
