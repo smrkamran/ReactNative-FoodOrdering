@@ -21,7 +21,9 @@ const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
 const ProductDetailsScreen = () => {
   const router = useRouter();
   const { id: idString } = useLocalSearchParams();
-  const id = parseFloat(typeof idString === "string" ? idString : idString?.[0]);
+  const id = parseFloat(
+    typeof idString === "string" ? idString : idString?.[0]
+  );
   const [selectedSize, setSelectedSize] = useState<PizzaSize>("M");
   const { data: product, isLoading, error } = useProduct(id);
 
@@ -35,15 +37,15 @@ const ProductDetailsScreen = () => {
 
   const { addItem } = useCart();
   const addToCart = () => {
-    addItem(product, selectedSize);
+    addItem(product!, selectedSize);
     router.push("/cart");
   };
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ title: product.name }} />
+      <Stack.Screen options={{ title: product!.name }} />
       <Image
-        source={{ uri: product.image || fallbackProductImage }}
+        source={{ uri: product!.image || fallbackProductImage }}
         style={styles.image}
       />
       <Text>Select size</Text>
@@ -72,7 +74,7 @@ const ProductDetailsScreen = () => {
           </Pressable>
         ))}
       </View>
-      <Text style={styles.price}>Price: ${product.price}</Text>
+      <Text style={styles.price}>Price: ${product!.price}</Text>
       <Button text="Add to cart" onPress={addToCart} />
     </View>
   );

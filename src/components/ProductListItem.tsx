@@ -1,5 +1,5 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import { Product } from "../types";
+import { Product, Tables } from "../types";
 import Colors from "@/constants/Colors";
 import { Link, useSegments } from "expo-router";
 
@@ -7,7 +7,7 @@ export const fallbackProductImage =
   "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png";
 
 type ProductListItemProps = {
-  product: Product;
+  product: Tables<"products">;
 };
 
 const ProductListItem = ({ product }: ProductListItemProps) => {

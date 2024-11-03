@@ -1,6 +1,6 @@
-import { Product } from "@/types";
+import { Tables } from "@/types";
 
-const products: Product[] = [
+const products: any[] = [
   {
     id: 1,
     name: 'Ultimate Pepperoni',
