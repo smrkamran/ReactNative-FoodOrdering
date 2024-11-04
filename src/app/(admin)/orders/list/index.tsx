@@ -3,6 +3,7 @@ import React from "react";
 import { Stack } from "expo-router";
 import OrderListItem from "@/components/OrderListItem";
 import { useAdminOrderList } from "@/api/orders";
+import { useInsertOrderSubscription } from "@/api/orders/subscriptions";
 
 const OrderList = () => {
   const {
@@ -10,6 +11,8 @@ const OrderList = () => {
     isLoading,
     error,
   } = useAdminOrderList({ archived: false });
+
+  useInsertOrderSubscription();
 
   if (isLoading) {
     return <ActivityIndicator />;

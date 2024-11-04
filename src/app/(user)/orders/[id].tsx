@@ -10,6 +10,7 @@ import { Stack, useLocalSearchParams } from "expo-router";
 import OrderItemListItem from "@/components/OrderItemListItem";
 import OrderListItem from "@/components/OrderListItem";
 import { useOrderDetails } from "@/api/orders";
+import { useUpdateOrderSubscription } from "@/api/orders/subscriptions";
 
 const OrderItem = () => {
   const { id: idString } = useLocalSearchParams();
@@ -17,6 +18,8 @@ const OrderItem = () => {
     typeof idString === "string" ? idString : idString?.[0]
   );
   const { data: order, isLoading, error } = useOrderDetails(id);
+
+  useUpdateOrderSubscription(id);
 
   if (isLoading) {
     return <ActivityIndicator />;
