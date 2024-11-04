@@ -6,6 +6,8 @@ export type Tables<T extends keyof Database['public']['Tables']> =
   Database['public']['Tables'][T]['Row'];
 export type InsertTables<T extends keyof Database['public']['Tables']> =
   Database['public']['Tables'][T]['Insert'];
+export type UpdateTables<T extends keyof Database['public']['Tables']> =
+  Database['public']['Tables'][T]['Update'];
 export type Enums<T extends keyof Database['public']['Enums']> =
   Database['public']['Enums'][T];
 
@@ -20,13 +22,13 @@ export type CartItem = {
 };
 
 export const OrderStatusList: OrderStatus[] = [
-  'New',
-  'Cooking',
-  'Delivering',
-  'Delivered',
+  'NEW',
+  'COOKING',
+  'DELIVERING',
+  'DELIVERED',
 ];
 
-export type OrderStatus = 'New' | 'Cooking' | 'Delivering' | 'Delivered';
+export type OrderStatus = 'NEW' | 'COOKING' | 'DELIVERING' | 'DELIVERED';
 
 export type Order = {
   id: number;
